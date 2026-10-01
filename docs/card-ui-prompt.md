@@ -1,0 +1,1 @@
+Design a Tailwind UI to display course information from a preselected list as a row(s) of cards, as shown in card-ui.png. Each course should be in its own card, and rows of cards should take up the entire width of the screen, overflowing to another row if necessary.

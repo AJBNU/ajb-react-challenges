@@ -1,19 +1,30 @@
 @import "tailwindcss";
 
-body {
-  margin: 8px;
+:root {
   color: #000;
-  font-family: serif;
+  background-color: #fff;
+  font-family: Georgia, 'Times New Roman', serif;
 }
 
-h1 {
-  margin-block: 0.67em;
-  font-size: 2em;
-  font-weight: bold;
-}
-
-ul {
+html,
+body,
+#root {
   margin: 0;
-  padding: 0;
-  list-style: none;
+  min-height: 100%;
+  width: 100%;
+}
+
+body {
+  min-height: 100vh;
+  background: #fff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+h1,
+h2,
+p {
+  margin: 0;
 }
