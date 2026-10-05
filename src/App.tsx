@@ -1,38 +1,28 @@
-interface Course {
-  term: string;
-  number: string;
-  meets: string;
-  title: string;
-}
-
-const courses: Course[] = [
-  {
-    term: 'Fall',
-    number: '101',
-    meets: 'MWF 11:00-11:50',
-    title: 'Computer Science: Concepts, Philosophy, and Connections',
-  },
-  {
-    term: 'Fall',
-    number: '110',
-    meets: 'MWF 10:00-10:50',
-    title: 'Intro Programming for non-majors',
-  },
-  {
-    term: 'Fall',
-    number: '111',
-    meets: 'MWF 13:00-13:50',
-    title: 'Fundamentals of Computer Programming I',
-  },
-  {
-    term: 'Fall',
-    number: '211',
-    meets: 'MWF 12:30-13:50',
-    title: 'Fundamentals of Computer Programming II',
-  },
-];
+import { useCourseSchedule } from './hooks/useCourseSchedule';
 
 const App = () => {
+  const { courses, isLoading, error } = useCourseSchedule();
+
+  if (isLoading) {
+    return (
+      <main className="p-4" role="status">
+        Loading courses...
+      </main>
+    );
+  }
+
+  if (error) {
+    return (
+      <main className="p-4" role="alert">
+        Unable to load courses: {error}
+      </main>
+    );
+  }
+
+  if (courses.length === 0) {
+    return <main className="p-4">No courses are available.</main>;
+  }
+
   return (
     <main className="min-h-screen bg-white p-0">
       <div className="grid w-full grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-4 px-0 py-0">

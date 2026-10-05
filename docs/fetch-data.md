@@ -1,0 +1,1 @@
+Using an asynchronous hook that alters a React state, replace the “dummy schedule” at the start of App.tsx with JSON data pulled from Firebase that contains a larger class list. The link to the new data can be found at https://courses.cs.northwestern.edu/394/guides/data/cs-courses-firestore.php .
