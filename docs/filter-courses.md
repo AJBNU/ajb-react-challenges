@@ -1,0 +1,1 @@
+Implement an interactive user interface in App.tsx to allow the user to filter the list of classes that are displayed by each class's term attribute. The interface should take the form of radio buttons, with the options being Fall, Winter, and Spring (the different options a course can have for its term attribute), and Fall being selected by default.
