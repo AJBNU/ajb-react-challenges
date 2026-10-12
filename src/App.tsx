@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { CourseCard } from './components/CourseCard';
+import { CourseSelectionList } from './components/CourseSelectionList';
 import { CourseTermFilter, type CourseTerm } from './components/CourseTermFilter';
 import { useCourseSchedule } from './hooks/useCourseSchedule';
 
@@ -44,14 +44,7 @@ const App = () => {
         {filteredCourses.length === 0 ? (
           <p className="text-neutral-700">No {selectedTerm.toLowerCase()} courses are available.</p>
         ) : (
-          <div className="grid w-full grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-4">
-            {filteredCourses.map((course) => (
-              <CourseCard
-                key={`${course.term}-${course.number}`}
-                course={course}
-              />
-            ))}
-          </div>
+          <CourseSelectionList courses={filteredCourses} />
         )}
       </div>
     </main>

@@ -1,0 +1,1 @@
+Add functionality to the React app that allows for the selection/deselection of courses. Whether or not a class is selected should be displayed on the course card, and selection/deselection should be done by clicking on the card a single time to change its state. The main bulk of the component should be created in a new file in /src/components.
