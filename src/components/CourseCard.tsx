@@ -3,12 +3,14 @@ import type { Course } from '../types/course';
 interface CourseCardProps {
   course: Course;
   isSelected?: boolean;
+  isSelectable?: boolean;
   onToggle?: () => void;
 }
 
 export const CourseCard = ({
   course,
   isSelected = false,
+  isSelectable = true,
   onToggle,
 }: CourseCardProps) => {
   return (
@@ -16,11 +18,14 @@ export const CourseCard = ({
       type="button"
       onClick={onToggle}
       aria-pressed={isSelected}
+      disabled={!isSelectable}
       className={[
-        'flex min-h-[230px] w-full cursor-pointer flex-col justify-between border p-5 text-left transition-colors duration-200',
+        'flex min-h-[230px] w-full flex-col justify-between border p-5 text-left transition-colors duration-200',
         isSelected
-          ? 'border-emerald-600 bg-emerald-50 shadow-sm'
-          : 'border-neutral-300 bg-white hover:border-neutral-400',
+          ? 'cursor-pointer border-emerald-600 bg-emerald-50 shadow-sm'
+          : isSelectable
+            ? 'cursor-pointer border-neutral-300 bg-white hover:border-neutral-400'
+            : 'cursor-not-allowed border-red-200 bg-red-50',
       ].join(' ')}
     >
       <div>
@@ -32,8 +37,15 @@ export const CourseCard = ({
             <span className="shrink-0 text-base text-emerald-700" aria-hidden="true">
               ✓
             </span>
+          ) : !isSelectable ? (
+            <span className="shrink-0 text-base text-red-500" aria-hidden="true">
+              ×
+            </span>
           ) : null}
         </h2>
+        {!isSelectable ? (
+          <span className="sr-only">Unavailable due to a schedule conflict.</span>
+        ) : null}
         <p className="text-[1.05rem] leading-[1.35] tracking-[-0.02em] text-neutral-800">
           {course.title}
         </p>

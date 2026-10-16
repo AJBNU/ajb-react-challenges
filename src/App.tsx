@@ -44,7 +44,7 @@ const App = () => {
         {filteredCourses.length === 0 ? (
           <p className="text-neutral-700">No {selectedTerm.toLowerCase()} courses are available.</p>
         ) : (
-          <CourseSelectionList courses={filteredCourses} />
+          <CourseSelectionList courses={filteredCourses} allCourses={courses} />
         )}
       </div>
     </main>
