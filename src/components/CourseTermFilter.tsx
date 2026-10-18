@@ -12,8 +12,8 @@ export const CourseTermFilter = ({
   onSelectTerm,
 }: CourseTermFilterProps) => {
   return (
-    <fieldset className="mb-6">
-      <legend className="mb-3 text-lg font-medium text-neutral-900">
+    <fieldset>
+      <legend className="mb-2 text-lg font-medium text-neutral-900">
         Filter by term
       </legend>
       <div className="flex flex-wrap gap-4">

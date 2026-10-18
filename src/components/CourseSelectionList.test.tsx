@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { CourseSelectionList } from './CourseSelectionList';
 import type { Course } from '../types/course';
@@ -11,7 +11,14 @@ const courses: Course[] = [
 
 describe('CourseSelectionList', () => {
   it('disables conflicting courses and makes them selectable again after unselection', () => {
-    render(<CourseSelectionList courses={courses} allCourses={courses} />);
+    const onSelectionChange = vi.fn();
+    render(
+      <CourseSelectionList
+        courses={courses}
+        allCourses={courses}
+        onSelectionChange={onSelectionChange}
+      />,
+    );
 
     const firstCourse = screen.getByRole('button', { name: /Fall CS 101/ });
     const conflictingCourse = screen.getByRole('button', { name: /Fall CS 102/ });
@@ -20,6 +27,7 @@ describe('CourseSelectionList', () => {
     fireEvent.click(firstCourse);
 
     expect(firstCourse.getAttribute('aria-pressed')).toBe('true');
+    expect(onSelectionChange).toHaveBeenLastCalledWith([courses[0]]);
     expect(conflictingCourse.hasAttribute('disabled')).toBe(true);
     expect(conflictingCourse.classList.contains('bg-red-50')).toBe(true);
 

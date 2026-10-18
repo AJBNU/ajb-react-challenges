@@ -7,25 +7,31 @@ import { CourseCard } from './CourseCard';
 interface CourseSelectionListProps {
   courses: Course[];
   allCourses: Course[];
+  onSelectionChange: (courses: Course[]) => void;
 }
 
-export const CourseSelectionList = ({ courses, allCourses }: CourseSelectionListProps) => {
+export const CourseSelectionList = ({
+  courses,
+  allCourses,
+  onSelectionChange,
+}: CourseSelectionListProps) => {
   const [selectedCourseIds, setSelectedCourseIds] = useState<Set<string>>(new Set());
 
   const toggleCourseSelection = (course: Course) => {
     const courseId = `${course.term}-${course.number}`;
 
-    setSelectedCourseIds((currentSelection) => {
-      const nextSelection = new Set(currentSelection);
+    const nextSelection = new Set(selectedCourseIds);
 
-      if (nextSelection.has(courseId)) {
-        nextSelection.delete(courseId);
-      } else {
-        nextSelection.add(courseId);
-      }
+    if (nextSelection.has(courseId)) {
+      nextSelection.delete(courseId);
+    } else {
+      nextSelection.add(courseId);
+    }
 
-      return nextSelection;
-    });
+    setSelectedCourseIds(nextSelection);
+    onSelectionChange(
+      allCourses.filter((allCourse) => nextSelection.has(`${allCourse.term}-${allCourse.number}`)),
+    );
   };
 
   const selectedCourses = allCourses.filter((course) =>
