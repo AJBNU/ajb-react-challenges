@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router';
 import { useState } from 'react';
 
 import { CoursePlanDialog } from './components/CoursePlanDialog';
@@ -41,13 +42,21 @@ const App = () => {
             selectedTerm={selectedTerm}
             onSelectTerm={setSelectedTerm}
           />
-          <button
-            type="button"
-            onClick={() => setIsCoursePlanOpen(true)}
-            className="shrink-0 border border-neutral-400 bg-white px-4 py-2 text-base text-neutral-900 hover:bg-neutral-100"
-          >
-            Course plan
-          </button>
+          <div className="flex shrink-0 gap-3">
+            <Link
+              to="/course/new/"
+              className="border border-neutral-400 bg-white px-4 py-2 text-base text-neutral-900 hover:bg-neutral-100"
+            >
+              Add course
+            </Link>
+            <button
+              type="button"
+              onClick={() => setIsCoursePlanOpen(true)}
+              className="border border-neutral-400 bg-white px-4 py-2 text-base text-neutral-900 hover:bg-neutral-100"
+            >
+              Course plan
+            </button>
+          </div>
         </div>
 
         {courses.length === 0 ? (

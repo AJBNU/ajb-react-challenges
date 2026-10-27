@@ -1,8 +1,33 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
+import type { ReactNode } from 'react';
+
 import { CourseSelectionList } from './CourseSelectionList';
 import type { Course } from '../types/course';
+
+vi.mock('@tanstack/react-router', () => ({
+  Link: ({
+    children,
+    className,
+    to,
+    params,
+    search,
+  }: {
+    children: ReactNode;
+    className?: string;
+    to: string;
+    params: { term: string; number: string };
+    search: { title: string; meets: string };
+  }) => (
+    <a
+      className={className}
+      href={`${to.replace('$term', params.term).replace('$number', params.number)}?title=${encodeURIComponent(search.title)}&meets=${encodeURIComponent(search.meets)}`}
+    >
+      {children}
+    </a>
+  ),
+}));
 
 const courses: Course[] = [
   { term: 'Fall', number: '101', meets: 'MWF 9:00-9:50', title: 'First course' },
@@ -23,6 +48,9 @@ describe('CourseSelectionList', () => {
     const firstCourse = screen.getByRole('button', { name: /Fall CS 101/ });
     const conflictingCourse = screen.getByRole('button', { name: /Fall CS 102/ });
 
+    expect(screen.getByRole('link', { name: 'Edit Fall CS 101' }).getAttribute('href')).toBe(
+      '/course/Fall/101/edit/?title=First%20course&meets=MWF%209%3A00-9%3A50',
+    );
     expect(conflictingCourse.hasAttribute('disabled')).toBe(false);
     fireEvent.click(firstCourse);
 
