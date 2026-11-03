@@ -1,4 +1,5 @@
 export interface Course {
+  id?: string;
   term: string;
   number: string;
   meets: string;
@@ -21,7 +22,7 @@ export interface CourseFormResolverResult {
   errors: Record<string, { type: string; message: string }>;
 }
 
-export const CourseSchema: Record<keyof Course, (value: string) => boolean> = {
+export const CourseSchema: Record<keyof Omit<Course, 'id'>, (value: string) => boolean> = {
   title: (value: string) => value.trim().length >= 2,
   term: (value: string) => COURSE_TERMS.indexOf(value.trim() as CourseTerm) !== -1,
   number: (value: string) => /^\d{3}(?:-\d+)?$/.test(value.trim()),

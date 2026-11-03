@@ -5,6 +5,7 @@ import { COURSE_TERMS, validateCourse, type Course, type CourseFieldErrors } fro
 interface CourseFormProps {
   course?: Course;
   onCancel: () => void;
+  onSave?: (course: Course) => Promise<void>;
 }
 
 const emptyCourse = {
@@ -14,14 +15,24 @@ const emptyCourse = {
   meets: '',
 };
 
-export const CourseForm = ({ course, onCancel }: CourseFormProps) => {
+export const CourseForm = ({ course, onCancel, onSave }: CourseFormProps) => {
   const [formValues, setFormValues] = useState<Course>(course ?? emptyCourse);
   const [formErrors, setFormErrors] = useState<CourseFieldErrors>({});
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
+
+  const hasChanges =
+    course !== undefined &&
+    (formValues.term !== course.term ||
+      formValues.number !== course.number ||
+      formValues.meets !== course.meets ||
+      formValues.title !== course.title);
 
   const updateField = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
     const nextValues = { ...formValues, [name]: value };
     setFormValues(nextValues);
+    setSubmitError(null);
 
     const nextErrors = validateCourse(nextValues);
     setFormErrors((previousErrors) => {
@@ -42,11 +53,33 @@ export const CourseForm = ({ course, onCancel }: CourseFormProps) => {
     setFormErrors(validateCourse(formValues));
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const nextErrors = validateCourse(formValues);
     setFormErrors(nextErrors);
+
+    if (Object.keys(nextErrors).length > 0 || !hasChanges || !course || !onSave) {
+      return;
+    }
+
+    setSubmitError(null);
+    setIsSaving(true);
+
+    try {
+      await onSave({
+        term: formValues.term.trim(),
+        number: formValues.number.trim(),
+        meets: formValues.meets.trim(),
+        title: formValues.title.trim(),
+      });
+    } catch (caughtError) {
+      setSubmitError(
+        caughtError instanceof Error ? caughtError.message : 'Unable to save course changes.',
+      );
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -60,7 +93,7 @@ export const CourseForm = ({ course, onCancel }: CourseFormProps) => {
             ? 'Update the course information.'
             : 'Enter the course details.'}
         </p>
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={(event) => void handleSubmit(event)} className="space-y-5">
           <div>
             <label htmlFor="course-term" className="mb-2 block font-medium">
               Course term
@@ -144,6 +177,20 @@ export const CourseForm = ({ course, onCancel }: CourseFormProps) => {
           >
             Cancel
           </button>
+          {course ? (
+            <button
+              type="submit"
+              disabled={!hasChanges || isSaving}
+              className="ml-3 border border-blue-800 bg-blue-800 px-4 py-2 text-base text-white hover:bg-blue-900 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {isSaving ? 'Saving...' : 'Submit'}
+            </button>
+          ) : null}
+          {submitError ? (
+            <p className="mt-3 text-sm text-red-600" role="alert">
+              Unable to save course: {submitError}
+            </p>
+          ) : null}
         </form>
       </section>
     </main>

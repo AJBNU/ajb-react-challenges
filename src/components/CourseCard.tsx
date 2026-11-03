@@ -70,7 +70,11 @@ export const CourseCard = ({
       <Link
         to="/course/$term/$number/edit/"
         params={{ term: course.term, number: course.number }}
-        search={{ title: course.title, meets: course.meets }}
+        search={{
+          id: course.id ?? `${course.term.charAt(0)}${course.number}`,
+          title: course.title,
+          meets: course.meets,
+        }}
         className="border-t border-neutral-300 px-5 py-3 text-sm font-medium text-blue-800 underline hover:bg-neutral-100 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-800"
       >
         Edit {course.term} CS {course.number}

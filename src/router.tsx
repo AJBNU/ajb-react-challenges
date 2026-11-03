@@ -32,6 +32,7 @@ const courseEditRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/course/$term/$number/edit',
   validateSearch: (search: Record<string, unknown>) => ({
+    id: typeof search.id === 'string' ? search.id : '',
     title: typeof search.title === 'string' ? search.title : '',
     meets: typeof search.meets === 'string' ? search.meets : '',
   }),

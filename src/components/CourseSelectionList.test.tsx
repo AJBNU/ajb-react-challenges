@@ -18,11 +18,11 @@ vi.mock('@tanstack/react-router', () => ({
     className?: string;
     to: string;
     params: { term: string; number: string };
-    search: { title: string; meets: string };
+    search: { id: string; title: string; meets: string };
   }) => (
     <a
       className={className}
-      href={`${to.replace('$term', params.term).replace('$number', params.number)}?title=${encodeURIComponent(search.title)}&meets=${encodeURIComponent(search.meets)}`}
+      href={`${to.replace('$term', params.term).replace('$number', params.number)}?id=${encodeURIComponent(search.id)}&title=${encodeURIComponent(search.title)}&meets=${encodeURIComponent(search.meets)}`}
     >
       {children}
     </a>
@@ -30,8 +30,8 @@ vi.mock('@tanstack/react-router', () => ({
 }));
 
 const courses: Course[] = [
-  { term: 'Fall', number: '101', meets: 'MWF 9:00-9:50', title: 'First course' },
-  { term: 'Fall', number: '102', meets: 'W 9:30-10:00', title: 'Conflicting course' },
+  { id: 'F101', term: 'Fall', number: '101', meets: 'MWF 9:00-9:50', title: 'First course' },
+  { id: 'F102', term: 'Fall', number: '102', meets: 'W 9:30-10:00', title: 'Conflicting course' },
 ];
 
 describe('CourseSelectionList', () => {
@@ -49,7 +49,7 @@ describe('CourseSelectionList', () => {
     const conflictingCourse = screen.getByRole('button', { name: /Fall CS 102/ });
 
     expect(screen.getByRole('link', { name: 'Edit Fall CS 101' }).getAttribute('href')).toBe(
-      '/course/Fall/101/edit/?title=First%20course&meets=MWF%209%3A00-9%3A50',
+      '/course/Fall/101/edit/?id=F101&title=First%20course&meets=MWF%209%3A00-9%3A50',
     );
     expect(conflictingCourse.hasAttribute('disabled')).toBe(false);
     fireEvent.click(firstCourse);
